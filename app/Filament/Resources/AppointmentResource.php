@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class AppointmentResource extends Resource
 {
     protected static ?string $model = Appointment::class;
-    
+
 protected static ?string $recordTitleAttribute = 'name';
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
@@ -82,6 +82,7 @@ protected static ?string $recordTitleAttribute = 'name';
     public static function getRelations(): array
     {
         return [
+            RelationManagers\BillingRelationManager::class,
             AuditLogRelationalManager::class
         ];
     }

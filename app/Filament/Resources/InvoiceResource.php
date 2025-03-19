@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\RelationManagers\AuditLogRelationalManager;
+use App\Filament\Resources\AppointmentResource\RelationManagers\BillingRelationManager;
 use App\Filament\Resources\InvoiceResource\Pages;
 use App\Filament\Resources\InvoiceResource\RelationManagers;
 use App\Models\Billing;
@@ -52,17 +54,19 @@ class InvoiceResource extends Resource
                     )
                     ->searchable()
                     ->required()
-                    ->reactive()
                     ->live()
+                    ->reactive()
                     ->afterStateUpdated(fn ($state, $set) =>
-                    $set('total_amount', Billing::where('appointment_id', $state)->value('total_amount') ?? 0)
+                    $set('total_amount', \App\Models\Billing::where('appointment_id', $state)->value('total_amount') ?? 0)
                     ),
 
                 Forms\Components\TextInput::make('total_amount')
                     ->numeric()
+                    ->readOnly()
                     ->live()
                     ->reactive()
                     ->required(),
+
                 Forms\Components\ToggleButtons::make('status')
                     ->inline()
                     ->options([
@@ -108,16 +112,30 @@ class InvoiceResource extends Resource
                     ]),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\Action::make('Download PDF')
-                    ->icon('heroicon-o-arrow-down-tray')
-                    ->color('primary')
-                    ->url(fn (Invoice $record) => route('invoice.download', $record), true)
-                    ->openUrlInNewTab(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\Action::make('Print invoice')
+                        ->icon('heroicon-o-arrow-down-tray')
+                        ->color('primary')
+                        ->url(fn (Invoice $record) => route('invoice.download', $record), true)
+                        ->openUrlInNewTab(),
+                    ])->icon('heroicon-m-ellipsis-horizontal')
+                    ->button()
+                    ->color('danger')
+                    ->label('Actions')
+
             ]);
     }
 
+
+    public static function getRelations(): array
+    {
+        return [
+//            BillingRelationManager::class,
+            AuditLogRelationalManager::class
+        ];
+    }
     public static function getPages(): array
     {
         return [

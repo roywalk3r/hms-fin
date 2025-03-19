@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use OwenIt\Auditing\Contracts\Auditable;
 use Spatie\Translatable\HasTranslations;
 
@@ -50,10 +52,15 @@ class Appointment extends Model implements Auditable
         return $this ->belongsTo(Invoice::class);
     }
 
+    public function billing(): HasMany
+    {
+        return $this->hasMany(Billing::class);
+    }
     public function staff(): BelongsTo
     {
         return $this->belongsTo(Staff::class);
     }
+
     public function auditLog(): \Illuminate\Database\Eloquent\Relations\MorphMany
     {
         return $this->morphMany(AuditLog::class, 'auditable');

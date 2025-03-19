@@ -46,7 +46,7 @@ class BillingResource extends Resource
                             ])
                             ->required(),
                         Forms\Components\Textarea::make('address')->required(),
-                        Forms\Components\TextInput::make('phone')->tel()->required(),
+                        Forms\Components\TextInput::make('phone' )->tel()->required(),
                         Forms\Components\TextInput::make('email')->email()->required(),
                         Forms\Components\TextInput::make('emergency_contact')->required(),
                     ])->columns(3)
@@ -58,7 +58,7 @@ class BillingResource extends Resource
                 Forms\Components\TextInput::make('paid_amount')
                     ->numeric()
                     ->prefix('₵')
-                    ->required(),
+                    ->default(0),
                 Forms\Components\DatePicker::make('due_date')
                     ->native(false)
                     ->required(),

@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('billings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('patient_id')->constrained();
+            $table->foreignId('appointment_id')->constrained();
             $table->decimal('total_amount', 8, 2);
             $table->decimal('paid_amount', 8, 2);
             $table->date('due_date');
