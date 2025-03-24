@@ -42,6 +42,11 @@ class MedicalRecord extends Model implements Auditable
     {
         return $this->belongsTo(Patient::class);
     }
+    public function appointment():BelongsTo
+    {
+        return $this->belongsTo(Appointment::class);
+    }
+
     public function auditLog(): \Illuminate\Database\Eloquent\Relations\MorphMany
     {
         return $this->morphMany(AuditLog::class, 'auditable');

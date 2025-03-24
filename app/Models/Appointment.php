@@ -60,6 +60,10 @@ class Appointment extends Model implements Auditable
     {
         return $this->belongsTo(Staff::class);
     }
+public function records()
+{
+    return $this->hasMany(MedicalRecord::class);
+}
 
     public function auditLog(): \Illuminate\Database\Eloquent\Relations\MorphMany
     {

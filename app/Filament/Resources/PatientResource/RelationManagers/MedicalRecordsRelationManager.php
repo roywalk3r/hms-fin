@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\PatientResource\RelationManagers;
 
+use App\Filament\Resources\MedicalRecordResource;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -18,16 +19,7 @@ class MedicalRecordsRelationManager extends RelationManager
 
     public function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                Forms\Components\DatePicker::make('date')
-                    ->required(),
-                Forms\Components\Textarea::make('diagnosis')
-                    ->required(),
-                Forms\Components\Textarea::make('treatment')
-                    ->required(),
-                Forms\Components\Textarea::make('notes'),
-            ]);
+        return MedicalRecordResource::form($form);
     }
 
     public function table(Table $table): Table

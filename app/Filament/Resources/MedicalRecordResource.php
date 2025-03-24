@@ -35,7 +35,20 @@ class MedicalRecordResource extends Resource
             ->schema([
                 Forms\Components\Select::make('patient_id')
                     ->relationship('patient', 'name')
+                    ->preload()
+                    ->searchable()
                     ->required(),
+                Forms\Components\Select::make('appointment_id')
+                    ->label('Appointment')
+                    ->searchable()
+                    ->preload()
+                    ->relationship('patient', 'name')
+                    ->options(fn () => \App\Models\Appointment::with('patient', 'staff')
+                        ->get()
+                        ->mapWithKeys(fn ($appointment) => [
+                            $appointment->id => "{$appointment->patient->name} - Dr. {$appointment->staff->name} ({$appointment->date->format('d M Y, h:i A')})"
+                        ])
+                    ),
                 Forms\Components\DatePicker::make('date')->required(),
                 Forms\Components\Textarea::make('diagnosis')->required(),
                 Forms\Components\Textarea::make('treatment')->required(),
@@ -89,24 +102,17 @@ class MedicalRecordResource extends Resource
        return static::getCachedRecords();
    }
     protected static function getCachedRecords(): Builder
-   {
-       $cacheKey = 'medical_records';
+    {
+        $cacheKey = 'medical_records';
         $cacheTtl = 3600; // 1 hour
 
-       $start = microtime(true);
-       $medirec = CacheService::remember($cacheKey, $cacheTtl, function () {
-            $queryStart = microtime(true);
-         $ids = Patient::pluck('id')->toArray();
-           $queryEnd = microtime(true);
-           Log::info('Database query time for IDs: ' . ($queryEnd - $queryStart) . ' seconds');
-           return $ids;
+        $medirec = CacheService::remember($cacheKey, $cacheTtl, function () {
+            return MedicalRecord::pluck('id')->toArray(); // Cache medical record IDs, not patients
         });
-       $end = microtime(true);
-
-       Log::info('Total time to get record IDs (including potential caching): ' . ($end - $start) . ' seconds');
 
         return MedicalRecord::whereIn('id', $medirec);
-   }
+    }
+
 public static function getGloballySearchableAttributes(): array
 {
     return ['diagnosis',  'patient.name'];

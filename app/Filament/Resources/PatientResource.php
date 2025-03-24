@@ -79,10 +79,10 @@ protected static ?string $recordTitleAttribute = 'name';
     public static function getRelations(): array
     {
         return [
-            AuditLogRelationalManager::class,
             RelationManagers\AppointmentsRelationManager::class,
             RelationManagers\MedicalRecordsRelationManager::class,
             RelationManagers\BillingRelationManager::class,
+            AuditLogRelationalManager::class,
         ];
     }
     public static function getEloquentQuery(): Builder
@@ -100,13 +100,13 @@ protected static function getCachedPatients(): Builder
 
     $patientIds = CacheService::remember($cacheKey, $cacheTtl, function () {
         $queryStart = microtime(true);
-        
+
         // Fetch patient IDs from the database
         $ids = Patient::pluck('id')->toArray();
-        
+
         $queryEnd = microtime(true);
         Log::info('Database query time for IDs: ' . ($queryEnd - $queryStart) . ' seconds');
-        
+
         return $ids;
     });
 

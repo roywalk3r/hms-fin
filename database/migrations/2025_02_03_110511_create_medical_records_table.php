@@ -16,10 +16,11 @@ return new class extends Migration
         Schema::create('medical_records', function (Blueprint $table) {
             $table->id();
             $table->foreignId('patient_id')->constrained();
+            $table->foreignId('appointment_id')->constrained();
             $table->date('date');
             $table->text('diagnosis');
             $table->text('treatment');
-            $table->text('notes');
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
 

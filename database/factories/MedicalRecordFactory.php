@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Appointment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\MedicalRecord;
@@ -23,6 +24,7 @@ class MedicalRecordFactory extends Factory
     {
         return [
             'patient_id' => Patient::factory(),
+            'appointment_id' => Appointment::factory(),
             'date' => fake()->date(),
             'diagnosis' => fake()->text(),
             'treatment' => fake()->text(),

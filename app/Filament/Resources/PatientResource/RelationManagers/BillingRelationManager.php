@@ -20,6 +20,20 @@ class BillingRelationManager extends RelationManager
     {
         return $form
             ->schema([
+                Forms\Components\Hidden::make('patient_id')
+                    ->default(fn ($record) => $record?->patient?->id),
+                Forms\Components\Select::make('appointment_id')
+                    ->label('Appointment')
+                    ->options(fn () => \App\Models\Appointment::with('patient', 'staff')
+                        ->get()
+                        ->mapWithKeys(fn ($appointment) => [
+                            $appointment->id => "{$appointment->patient->name} - Dr. {$appointment->staff->name} ({$appointment->date->format('d M Y, h:i A')})"
+                        ])
+                    )
+            ->preload()
+            ->searchable()
+            ->native(false)
+            ->required(),
                 Forms\Components\TextInput::make('total_amount')
                     ->required()
                     ->numeric(),

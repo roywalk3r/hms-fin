@@ -82,6 +82,7 @@ protected static ?string $recordTitleAttribute = 'name';
     public static function getRelations(): array
     {
         return [
+            RelationManagers\RecordsRelationManager::class,
             RelationManagers\BillingRelationManager::class,
             AuditLogRelationalManager::class
         ];

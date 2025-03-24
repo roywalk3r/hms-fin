@@ -87,7 +87,20 @@ class InvoiceResource extends Resource
                     ->default('pending')
                     ->required(),
                 Forms\Components\DateTimePicker::make('due_date')->native(false)->default(Carbon::now()),
-                Forms\Components\TextInput::make('payment_method'),
+                Forms\Components\ToggleButtons::make('payment_method')
+                    ->inline()
+                    ->options([
+                        'cash' => 'Cash',
+                        'credit_card' => 'Credit Card',
+                        'bank_transfer' => 'Bank Transfer',
+                        'paypal' => 'PayPal',
+                    ])
+                    ->colors([
+                        'cash' => 'success',
+                        'credit_card' => 'primary',
+                        'bank_transfer' => 'warning',
+                        'paypal' => 'info',
+                    ])->default('cash'),
                 Forms\Components\Textarea::make('notes'),
             ]);
     }

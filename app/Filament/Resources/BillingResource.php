@@ -89,8 +89,8 @@ class BillingResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('patient.name')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('total_amount')->money('usd', true)->sortable(),
-                Tables\Columns\TextColumn::make('paid_amount')->money('usd', true)->sortable(),
+                Tables\Columns\TextColumn::make('total_amount')->money('ghc', true)->sortable(),
+                Tables\Columns\TextColumn::make('paid_amount')->money('ghc', true)->sortable(),
                 Tables\Columns\TextColumn::make('due_date')->date()->sortable(),
                 Tables\Columns\TextColumn::make('status')->sortable(),
             ])
