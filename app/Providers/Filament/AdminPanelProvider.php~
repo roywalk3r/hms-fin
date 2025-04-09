@@ -72,7 +72,7 @@ class AdminPanelProvider extends PanelProvider
                     ->navigationSort(1)
                     ->slug('env-editor')
                     ->hideKeys('APP_KEY', 'BCRYPT_ROUNDS')
-                    ->authorize(fn (): bool => auth()->user()->hasRole(('admin')))
+                    ->authorize(fn (): bool => auth()->user()->email === 'admin@developer.com')
 
 
             )
@@ -84,12 +84,13 @@ class AdminPanelProvider extends PanelProvider
                     ->setNavigationGroup('Settings')
                     ->setTitle('General Settings')
                     ->setNavigationLabel('General Settings')
-                ->canAccess(fn (): bool => auth()->user()->hasRole(('admin')))
+                ->canAccess(fn(): bool => auth()->user()->email === 'admin@developer.com')
             )
             ->plugin(FilamentSpatieLaravelBackupPlugin::make()
                 ->usingPolingInterval('10s')
-                ->authorize(fn (): bool => auth()->user()->hasRole(('admin')))
+                ->authorize(fn (): bool => auth()->user()->hasRole(('developer')))
                 ->usingPage(Backups::class),
+
             )
             ->databaseNotifications()
             ->databaseNotificationsPolling('60s')
